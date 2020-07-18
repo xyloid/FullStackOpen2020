@@ -5,14 +5,20 @@ const Header = (props) => {
   return <h1>{props.course}</h1>;
 };
 
+const Part = (props)=>{
+  return (
+    <p key={props.item.name}>
+        {props.item.name} {props.item.number}
+      </p>
+  )
+}
+
 const Content = (props) => {
   let items = [];
   console.log(props.elist);
   for (let item of props.elist) {
     items.push(
-      <p key={item.name}>
-        {item.name} {item.number}
-      </p>
+     <Part item={item}/> 
     );
   }
   console.log(items);
