@@ -5,6 +5,19 @@ const randNum = (n) => Math.floor(Math.random() * n);
 
 const Button = ({ handler, text }) => <button onClick={handler}>{text}</button>;
 
+const MaxVote = ({points, anecdotes})=>{
+  let max = Math.max(...points);
+  let max_select = points.indexOf(max);
+  return (
+    <div>
+      <h1>Anecdotes with most votes</h1>
+      <p>{anecdotes[max_select]}</p>
+      <p>has vote {points[max_select]}</p>
+    </div>
+  )
+}
+
+
 const App = (props) => {
   const [selected, setSelected] = useState(randNum(anecdotes.length));
 
@@ -14,6 +27,7 @@ const App = (props) => {
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{props.anecdotes[selected]}</p>
       <p>has vote {points[selected]}</p>
       <Button
@@ -30,6 +44,7 @@ const App = (props) => {
         }}
         text="next anecdote"
       />
+      <MaxVote points={points} anecdotes={props.anecdotes} />
     </div>
   );
 };
