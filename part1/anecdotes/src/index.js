@@ -5,18 +5,13 @@ const randNum = (n) => Math.floor(Math.random() * n);
 
 const Button = ({ handler, text }) => <button onClick={handler}>{text}</button>;
 
-const MaxVote = ({points, anecdotes})=>{
-  let max = Math.max(...points);
-  let max_select = points.indexOf(max);
-  return (
-    <div>
-      <h1>Anecdotes with most votes</h1>
-      <p>{anecdotes[max_select]}</p>
-      <p>has vote {points[max_select]}</p>
-    </div>
-  )
-}
+const MaxVote = points=>points.indexOf(Math.max(...points))
 
+
+const ShowAnecdote = ({anecdotes, selected, points})=>(
+  <><p>{anecdotes[selected]}</p>
+  <p>has vote {points[selected]}</p></>
+)
 
 const App = (props) => {
   const [selected, setSelected] = useState(randNum(anecdotes.length));
@@ -28,8 +23,7 @@ const App = (props) => {
   return (
     <div>
       <h1>Anecdote of the day</h1>
-      <p>{props.anecdotes[selected]}</p>
-      <p>has vote {points[selected]}</p>
+      <ShowAnecdote anecdotes = {props.anecdotes} points = {points} selected = {selected}/>
       <Button
         handler={() => {
           let copy = [...points];
@@ -44,7 +38,8 @@ const App = (props) => {
         }}
         text="next anecdote"
       />
-      <MaxVote points={points} anecdotes={props.anecdotes} />
+      <h1>Anecdote with most votes</h1>
+      <ShowAnecdote anecdotes = {props.anecdotes} points = {points} selected = {MaxVote(points)}/>
     </div>
   );
 };
