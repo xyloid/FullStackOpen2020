@@ -4,7 +4,7 @@ note over browser:
 user wrote a new note and clicked submit
 end note
 
-browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note  [{"note":"note+content"}]
 server->browser: RESPONSE HTTP status code 302 location: /notes
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
 
@@ -12,7 +12,6 @@ note over browser:
 browser begin to reload the page, the same routine as in the example
 end note 
 
-browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
 server-->browser: HTML-code
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
 server-->browser: main.css
