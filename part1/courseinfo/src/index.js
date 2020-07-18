@@ -14,20 +14,17 @@ const Part = (props) => {
 };
 
 const Content = (props) => {
-  let items = [];
-  console.log(props.elist);
-  for (let item of props.elist) {
-    items.push(<Part item={item} key={item.name} />);
-  }
-  console.log(items);
-  return <div>{items}</div>;
+  return (
+    <div>
+      {props.list.map((item) => (
+        <Part item={item} key={item.name} />
+      ))}
+    </div>
+  );
 };
 
 const Total = (props) => {
-  let sum = 0;
-  for (let item of props.elist) {
-    sum += item.number;
-  }
+  let sum = props.list.reduce((s, item) => s + item.number, 0);
   return <p>Number of exercises {sum}</p>;
 };
 
@@ -49,8 +46,8 @@ const App = () => {
   return (
     <div>
       <Header course={course} />
-      <Content elist={exercises_list} />
-      <Total elist={exercises_list} />
+      <Content list={exercises_list} />
+      <Total list={exercises_list} />
     </div>
   );
 };
