@@ -1,0 +1,9 @@
+title 0.6 New note (Single page app)
+
+note over browser:
+user wrote a new note and clicked submit, onsubmit event 
+handler will render the new notes to the display and send
+new note to the server
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/spa {"message":"note created"}
