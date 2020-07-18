@@ -20,7 +20,7 @@ const Content = (props) => {
     items.push(<Part item={item} key={item.name} />);
   }
   console.log(items);
-  return <>{items}</>;
+  return <div>{items}</div>;
 };
 
 const Total = (props) => {
