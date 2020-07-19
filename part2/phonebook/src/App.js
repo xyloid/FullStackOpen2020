@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -67,18 +68,7 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-
-      {persons
-        .filter((person) => isValid(person))
-        .map((person) => (
-          <p key={person.name}>
-            {person.name} {person.number}
-          </p>
-        ))}
-
-      <div>
-        debug: {newName} {newPhoneNumber}
-      </div>
+      <Persons persons={persons.filter((person) => isValid(person))} />
     </div>
   );
 };
