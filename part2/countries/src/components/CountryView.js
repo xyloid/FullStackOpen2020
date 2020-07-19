@@ -5,12 +5,13 @@ const CountryView = ({ country }) => {
   const [temperature, setTemperature] = useState(0);
   const [humidity, setHumid] = useState(0);
   const [condition, setCondition] = useState("");
-  //   const MY_KEY = "b5261d2bc269480ba43192150201907";
+
+  const api_key = process.env.REACT_APP_WEATHER_API_KEY;
 
   useEffect(() => {
     axios
       .get(
-        `http://api.weatherapi.com/v1/current.json?key=b5261d2bc269480ba43192150201907&q=${country.capital}`
+        `http://api.weatherapi.com/v1/current.json?key=${api_key}&q=${country.capital}`
       )
       .then((response) => {
         console.log("temp_c:", response);
@@ -18,7 +19,7 @@ const CountryView = ({ country }) => {
         setHumid(response.data.current.humidity);
         setCondition(response.data.current.condition.icon);
       });
-  }, [country.capital]);
+  }, [country.capital, api_key]);
 
   return (
     <div>
