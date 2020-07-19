@@ -1,5 +1,6 @@
 import React from "react";
 import Country from "./Country";
+import CountryView from "./CountryView";
 
 const maxCountries = 10;
 
@@ -9,19 +10,7 @@ const Countries = ({ countries }) => {
   } else if (countries.length === 1) {
     let country = countries[0];
     console.log("show single contry details", country);
-    return (
-      <div>
-        <h2>{country.name}</h2>
-        <p>captial {country.capital}</p>
-        <p>population {country.population}</p>
-        <h2>languages</h2>
-        <ul>
-          {country.languages.map((language) => (
-            <li key={language.name}>{language.name}</li>
-          ))}
-        </ul>
-      </div>
-    );
+    return <CountryView country={country} />;
   } else {
     console.log("current country list", countries);
     return (
