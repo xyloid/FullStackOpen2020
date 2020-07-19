@@ -19,7 +19,7 @@ const App = (props) => {
   const points_init = new Array(anecdotes.length).fill(0);
 
   const [points, setPoints] = useState(points_init);
-
+  
   return (
     <div>
       <h1>Anecdote of the day</h1>
