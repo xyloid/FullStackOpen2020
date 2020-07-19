@@ -43,7 +43,24 @@ const App = () => {
     event.preventDefault();
 
     if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to the phonebook, replace the old number with a new one ?`
+        )
+      ) {
+        const toUpdate = persons.find((p) => p.name === newName);
+
+        let newPerson = {
+          ...toUpdate,
+          number: newPhoneNumber,
+        };
+
+        personsServices.update(newPerson.id, newPerson).then((response) => {
+          setPersons(
+            persons.map((p) => (p.name === response.name ? response : p))
+          );
+        });
+      }
     } else if (newName.length > 0) {
       let newPerson = {
         name: newName,
@@ -60,11 +77,9 @@ const App = () => {
 
   const deletePerson = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      personsServices
-        .remove(person.id)
-        .then((response) => {
-          setPersons(persons.filter((candi) => person.id !== candi.id));
-        });
+      personsServices.remove(person.id).then((response) => {
+        setPersons(persons.filter((candi) => person.id !== candi.id));
+      });
     }
   };
 
