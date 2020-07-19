@@ -56,6 +56,7 @@ const App = () => {
         };
 
         personsServices.update(newPerson.id, newPerson).then((response) => {
+          // after update the server state, update the browser state
           setPersons(
             persons.map((p) => (p.name === response.name ? response : p))
           );
