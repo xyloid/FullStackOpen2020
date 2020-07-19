@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const maxCountries = 10
+
 const Countries = ({ countries }) => {
-  if (countries.length > 10) {
+  if (countries.length > maxCountries) {
     return <div>Too many matches, specify another filter.</div>;
   } else {
     console.log(countries);
@@ -31,8 +33,9 @@ function App() {
     console.log("before", pattern);
     console.log("target", event.target.value);
     setPattern(event.target.value);
+    // setState is asynchronuous.
     console.log("after", pattern);
-    setCurrentCountries(searchCountries(pattern));
+    setCurrentCountries(searchCountries(event.target.value));
   };
 
   const searchCountries = (pat) =>
