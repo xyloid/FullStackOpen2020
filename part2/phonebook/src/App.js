@@ -48,15 +48,24 @@ const App = () => {
       let newPerson = {
         name: newName,
         number: newPhoneNumber,
-        id: persons.length + 1,
       };
       personsServices
         .create(newPerson)
-        .then((returnedPerson) => setPersons(persons.concat(newPerson)));
+        .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
     }
 
     setNewName("");
     setNewPhoneNumber("");
+  };
+
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personsServices
+        .remove(person.id)
+        .then((response) => {
+          setPersons(persons.filter((candi) => person.id !== candi.id));
+        });
+    }
   };
 
   return (
@@ -75,7 +84,10 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons={persons.filter((person) => isValid(person))} />
+      <Persons
+        persons={persons.filter((person) => isValid(person))}
+        deleteHandler={deletePerson}
+      />
     </div>
   );
 };
