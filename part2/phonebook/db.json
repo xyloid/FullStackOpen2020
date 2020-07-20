@@ -16,16 +16,6 @@
       "id": 6
     },
     {
-      "name": "Newton",
-      "number": "11111",
-      "id": 7
-    },
-    {
-      "name": "Plank",
-      "number": "124234123",
-      "id": 8
-    },
-    {
       "name": "Lewis Carrol",
       "number": "56980756798",
       "id": 9
@@ -36,9 +26,14 @@
       "id": 10
     },
     {
-      "name": "Paul Grahm",
-      "number": "3465345",
-      "id": 11
+      "name": "Einstein",
+      "number": "23453425",
+      "id": 12
+    },
+    {
+      "name": "Newton",
+      "number": "111",
+      "id": 13
     }
   ]
 }

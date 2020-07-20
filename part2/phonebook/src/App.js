@@ -14,12 +14,10 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   const [notification, setNotification] = useState(null);
+  const [notificationClass, setNotificationClass] = useState("");
 
   useEffect(() => {
     personsServices.getAll().then((response) => setPersons(response));
-    // axios.get("http://localhost:3001/persons").then((response) => {
-    //   setPersons(response.data);
-    // });
   }, []);
 
   const isValid = (person) => {
@@ -42,6 +40,13 @@ const App = () => {
     setFilter(event.target.value);
   };
 
+  const showNotification = (message) => {
+    setNotification(message);
+    setTimeout(() => {
+      setNotification(null, null);
+    }, 5000);
+  };
+
   const addPerson = (event) => {
     event.preventDefault();
 
@@ -58,36 +63,34 @@ const App = () => {
           number: newPhoneNumber,
         };
 
-        personsServices.update(newPerson.id, newPerson).then((response) => {
-
-          
-
-          // after update the server state, update the browser state
-          setPersons(
-            persons.map((p) => (p.name === response.name ? response : p))
-          );
-
-          setNotification(`${newName} updated.`);
-          setTimeout(() => {
-            setNotification(null);
-          }, 5000);
-
-        });
+        personsServices
+          .update(newPerson.id, newPerson)
+          .then((response) => {
+            // after update the server state, update the browser state
+            setPersons(
+              persons.map((p) => (p.name === response.name ? response : p))
+            );
+            setNotificationClass("notification");
+            showNotification(`${newName} updated.`);
+          })
+          .catch((error) => {
+            setPersons(persons.filter((candi) => newPerson.id !== candi.id));
+            setNotificationClass("error");
+            showNotification(
+              `Information of ${newName} has already been removed from the server.`
+            );
+          });
       }
     } else if (newName.length > 0) {
       let newPerson = {
         name: newName,
         number: newPhoneNumber,
       };
-      personsServices
-        .create(newPerson)
-        .then((returnedPerson) => {
-          setPersons(persons.concat(returnedPerson));
-          setNotification(`${newName} added.`);
-          setTimeout(() => {
-            setNotification(null);
-          }, 5000);
-        });
+      personsServices.create(newPerson).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNotificationClass("notification");
+        showNotification(`${newName} added.`);
+      });
     }
 
     setNewName("");
@@ -105,7 +108,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification message={notification} className={notificationClass}/>
       <Filter changeHandler={handleFilterChange} pattern={filter} />
 
       <h3>Add a new </h3>
