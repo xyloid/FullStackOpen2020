@@ -3,6 +3,7 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personsServices from "./services/persons";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,6 +12,8 @@ const App = () => {
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
 
   const [filter, setFilter] = useState("");
+
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     personsServices.getAll().then((response) => setPersons(response));
@@ -56,10 +59,19 @@ const App = () => {
         };
 
         personsServices.update(newPerson.id, newPerson).then((response) => {
+
+          
+
           // after update the server state, update the browser state
           setPersons(
             persons.map((p) => (p.name === response.name ? response : p))
           );
+
+          setNotification(`${newName} updated.`);
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+
         });
       }
     } else if (newName.length > 0) {
@@ -69,7 +81,13 @@ const App = () => {
       };
       personsServices
         .create(newPerson)
-        .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNotification(`${newName} added.`);
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+        });
     }
 
     setNewName("");
@@ -87,7 +105,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <Notification message={notification} />
       <Filter changeHandler={handleFilterChange} pattern={filter} />
 
       <h3>Add a new </h3>
