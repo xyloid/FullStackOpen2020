@@ -20,4 +20,9 @@ const update = (id, newObject) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, create, remove, update };
+const findByName = (name) => {
+  const request = axios.get(`${baseUrl}/?name=${name}`);
+  return request.then((response) => response.data);
+};
+
+export default { getAll, create, remove, update, findByName };

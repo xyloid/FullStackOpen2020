@@ -49,49 +49,57 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
+    // if (persons.some((person) => person.name === newName)) {
+    personsServices.findByName(newName).then((result) => {
+      console.log(result);
+      if (result.length > 0) {
+        console.log("already has ", newName);
+        if (
+          window.confirm(
+            `${newName} is already added to the phonebook, replace the old number with a new one ?`
+          )
+        ) {
+          const toUpdate = persons.find((p) => p.name === newName);
 
-    if (persons.some((person) => person.name === newName)) {
-      if (
-        window.confirm(
-          `${newName} is already added to the phonebook, replace the old number with a new one ?`
-        )
-      ) {
-        const toUpdate = persons.find((p) => p.name === newName);
+          let newPerson = {
+            ...toUpdate,
+            number: newPhoneNumber,
+          };
 
-        let newPerson = {
-          ...toUpdate,
-          number: newPhoneNumber,
-        };
-
-        personsServices
-          .update(newPerson.id, newPerson)
-          .then((response) => {
-            // after update the server state, update the browser state
-            setPersons(
-              persons.map((p) => (p.name === response.name ? response : p))
-            );
+          personsServices
+            .update(newPerson.id, newPerson)
+            .then((response) => {
+              // after update the server state, update the browser state
+              setPersons(
+                persons.map((p) => (p.name === response.name ? response : p))
+              );
+              setNotificationClass("notification");
+              showNotification(`${newName} updated.`);
+            })
+            .catch((error) => {
+              setPersons(persons.filter((candi) => newPerson.id !== candi.id));
+              setNotificationClass("error");
+              showNotification(
+                `Information of ${newName} has already been removed from the server.`
+              );
+            });
+        }
+      } else {
+        console.log("a new name ", newName);
+        if (persons.some((person) => person.name === newName)) {
+        } else if (newName.length > 0) {
+          let newPerson = {
+            name: newName,
+            number: newPhoneNumber,
+          };
+          personsServices.create(newPerson).then((returnedPerson) => {
+            setPersons(persons.concat(returnedPerson));
             setNotificationClass("notification");
-            showNotification(`${newName} updated.`);
-          })
-          .catch((error) => {
-            setPersons(persons.filter((candi) => newPerson.id !== candi.id));
-            setNotificationClass("error");
-            showNotification(
-              `Information of ${newName} has already been removed from the server.`
-            );
+            showNotification(`${newName} added.`);
           });
+        }
       }
-    } else if (newName.length > 0) {
-      let newPerson = {
-        name: newName,
-        number: newPhoneNumber,
-      };
-      personsServices.create(newPerson).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNotificationClass("notification");
-        showNotification(`${newName} added.`);
-      });
-    }
+    });
 
     setNewName("");
     setNewPhoneNumber("");
@@ -108,7 +116,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} className={notificationClass}/>
+      <Notification message={notification} className={notificationClass} />
       <Filter changeHandler={handleFilterChange} pattern={filter} />
 
       <h3>Add a new </h3>
