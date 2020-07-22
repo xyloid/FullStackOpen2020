@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import Filter from "./components/Filter";
-import PersonForm from "./components/PersonForm";
-import Persons from "./components/Persons";
-import personsServices from "./services/persons";
-import Notification from "./components/Notification";
+import React, { useState, useEffect } from 'react';
+import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
+import personsServices from './services/persons';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
 
-  const [newName, setNewName] = useState("");
-  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [newName, setNewName] = useState('');
+  const [newPhoneNumber, setNewPhoneNumber] = useState('');
 
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
 
   const [notification, setNotification] = useState(null);
-  const [notificationClass, setNotificationClass] = useState("");
+  const [notificationClass, setNotificationClass] = useState('');
 
   useEffect(() => {
     personsServices.getAll().then((response) => setPersons(response));
@@ -23,9 +23,8 @@ const App = () => {
   const isValid = (person) => {
     if (filter.trim() === 0) {
       return true;
-    } else {
-      return person.name.toLowerCase().includes(filter.toLowerCase());
     }
+    return person.name.toLowerCase().includes(filter.toLowerCase());
   };
 
   const handleNameChange = (event) => {
@@ -53,10 +52,10 @@ const App = () => {
     personsServices.findByName(newName).then((result) => {
       console.log(result);
       if (result.length > 0) {
-        console.log("already has ", newName);
+        console.log('already has ', newName);
         if (
           window.confirm(
-            `${newName} is already added to the phonebook, replace the old number with a new one ?`
+            `${newName} is already added to the phonebook, replace the old number with a new one ?`,
           )
         ) {
           // const toUpdate = persons.find((p) => p.name === newName);
@@ -66,7 +65,7 @@ const App = () => {
           //   number: newPhoneNumber,
           // };
 
-          let newPerson = {
+          const newPerson = {
             ...result[0],
             number: newPhoneNumber,
           };
@@ -76,58 +75,59 @@ const App = () => {
             .then((response) => {
               // after update the server state, update the browser state
               setPersons(
-                persons.map((p) => (p.name === response.name ? response : p))
+                persons.map((p) => (p.name === response.name ? response : p)),
               );
-              setNotificationClass("notification");
+              setNotificationClass('notification');
               showNotification(`${newName} updated.`);
             })
             .catch((error) => {
-              console.log("update error", error.response.data);
+              console.log('update error', error.response.data);
 
               // setPersons(persons.filter((candi) => newPerson.id !== candi.id));
-              setNotificationClass("error");
+              setNotificationClass('error');
               showNotification(error.response.data.error);
             });
         }
       } else {
-        console.log("a new name ", newName);
+        console.log('a new name ', newName);
         if (newName.length > 0) {
-          let newPerson = {
+          const newPerson = {
             name: newName,
             number: newPhoneNumber,
           };
           if (persons.some((person) => person.name === newName)) {
-            console.log("clear current state to remove duplicate");
+            console.log('clear current state to remove duplicate');
             setPersons(persons.filter((p) => p.name !== newName));
-            setNotificationClass("error");
+            setNotificationClass('error');
             showNotification(
-              `${newName} has already been removed from the server.`
+              `${newName} has already been removed from the server.`,
             );
-          } else
+          } else {
             personsServices
               .create(newPerson)
               .then((returnedPerson) => {
                 setPersons(persons.concat(returnedPerson));
-                setNotificationClass("notification");
+                setNotificationClass('notification');
                 showNotification(`${newName} added.`);
               })
               .catch((error) => {
-                console.log("failed to create new person", error);
-                setNotificationClass("error");
+                console.log('failed to create new person', error);
+                setNotificationClass('error');
                 console.log(error.response.data);
                 showNotification(error.response.data.error);
               });
+          }
         }
       }
     });
 
-    setNewName("");
-    setNewPhoneNumber("");
+    setNewName('');
+    setNewPhoneNumber('');
   };
 
   const deletePerson = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      personsServices.remove(person.id).then((response) => {
+      personsServices.remove(person.id).then(() => {
         setPersons(persons.filter((candi) => person.id !== candi.id));
       });
     }
