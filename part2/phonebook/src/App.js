@@ -129,6 +129,8 @@ const App = () => {
     if (window.confirm(`Delete ${person.name}?`)) {
       personsServices.remove(person.id).then(() => {
         setPersons(persons.filter((candi) => person.id !== candi.id));
+        setNotificationClass('error');
+        showNotification(`${person.name} deleted.`);
       });
     }
   };
