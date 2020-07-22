@@ -59,10 +59,15 @@ const App = () => {
             `${newName} is already added to the phonebook, replace the old number with a new one ?`
           )
         ) {
-          const toUpdate = persons.find((p) => p.name === newName);
+          // const toUpdate = persons.find((p) => p.name === newName);
+
+          // let newPerson = {
+          //   ...toUpdate,
+          //   number: newPhoneNumber,
+          // };
 
           let newPerson = {
-            ...toUpdate,
+            ...result[0],
             number: newPhoneNumber,
           };
 
@@ -77,26 +82,41 @@ const App = () => {
               showNotification(`${newName} updated.`);
             })
             .catch((error) => {
-              setPersons(persons.filter((candi) => newPerson.id !== candi.id));
+              console.log("update error", error.response.data);
+
+              // setPersons(persons.filter((candi) => newPerson.id !== candi.id));
               setNotificationClass("error");
-              showNotification(
-                `Information of ${newName} has already been removed from the server.`
-              );
+              showNotification(error.response.data.error);
             });
         }
       } else {
         console.log("a new name ", newName);
-        if (persons.some((person) => person.name === newName)) {
-        } else if (newName.length > 0) {
+        if (newName.length > 0) {
           let newPerson = {
             name: newName,
             number: newPhoneNumber,
           };
-          personsServices.create(newPerson).then((returnedPerson) => {
-            setPersons(persons.concat(returnedPerson));
-            setNotificationClass("notification");
-            showNotification(`${newName} added.`);
-          });
+          if (persons.some((person) => person.name === newName)) {
+            console.log("clear current state to remove duplicate");
+            setPersons(persons.filter((p) => p.name !== newName));
+            setNotificationClass("error");
+            showNotification(
+              `${newName} has already been removed from the server.`
+            );
+          } else
+            personsServices
+              .create(newPerson)
+              .then((returnedPerson) => {
+                setPersons(persons.concat(returnedPerson));
+                setNotificationClass("notification");
+                showNotification(`${newName} added.`);
+              })
+              .catch((error) => {
+                console.log("failed to create new person", error);
+                setNotificationClass("error");
+                console.log(error.response.data);
+                showNotification(error.response.data.error);
+              });
         }
       }
     });
