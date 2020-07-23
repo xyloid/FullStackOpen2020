@@ -1,5 +1,6 @@
-import axios from "axios";
-const baseUrl = "/api/persons";
+import axios from 'axios';
+
+const baseUrl = '/api/persons';
 
 const getAll = () => {
   const request = axios.get(baseUrl);
@@ -11,9 +12,7 @@ const create = (newPerson) => {
   return request.then((response) => response.data);
 };
 
-const remove = (id) => {
-  return axios.delete(`${baseUrl}/${id}`);
-};
+const remove = (id) => axios.delete(`${baseUrl}/${id}`);
 
 const update = (id, newObject) => {
   const request = axios.put(`${baseUrl}/${id}`, newObject);
@@ -25,4 +24,6 @@ const findByName = (name) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, create, remove, update, findByName };
+export default {
+  getAll, create, remove, update, findByName,
+};
