@@ -11,7 +11,7 @@ const initialState = [
   },
 ];
 
-const noteReducer = (state = initialState, action) => {
+const noteReducer = (state = [], action) => {
   console.log('ACTION: ', action)
   switch (action.type) {
     case "NEW_NOTE":

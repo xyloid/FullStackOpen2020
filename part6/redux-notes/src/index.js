@@ -7,9 +7,16 @@ import noteReducer from "./reducers/noteReducer";
 import filterReducer from "./reducers/filterReducer";
 
 import { composeWithDevTools } from "redux-devtools-extension";
+import noteService from "./services/notes";
 
 const reducer = combineReducers({ notes: noteReducer, filter: filterReducer });
 const store = createStore(reducer, composeWithDevTools());
+
+noteService.getAll().then((notes) =>
+  notes.forEach((note) => {
+    store.dispatch({ type: "NEW_NOTE", data: note });
+  })
+);
 
 console.log(store.getState());
 
