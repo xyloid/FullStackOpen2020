@@ -12,7 +12,7 @@ import noteService from "./services/notes";
 const reducer = combineReducers({ notes: noteReducer, filter: filterReducer });
 const store = createStore(reducer, composeWithDevTools());
 
-noteService.getAll().then((notes) =>store.dispatch(initializeNotes(notes)));
+// noteService.getAll().then((notes) =>store.dispatch(initializeNotes(notes)));
 
 console.log(store.getState());
 
