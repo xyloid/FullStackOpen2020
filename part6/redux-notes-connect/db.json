@@ -19,6 +19,11 @@
       "content": "redux-thunk is good",
       "important": false,
       "id": 4
+    },
+    {
+      "content": "a new note of connect",
+      "important": false,
+      "id": 5
     }
   ]
 }
