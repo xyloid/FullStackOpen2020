@@ -1,57 +1,62 @@
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
+import React from "react";
+import ReactDOM from "react-dom";
+
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 const Home = () => (
-  <div> <h2>TKTL notes app</h2> </div>
-)
+  <div>
+    <h2>TKTL notes app</h2>
+  </div>
+);
 
 const Notes = () => (
-  <div> <h2>Notes</h2> </div>
-)
+  <div>
+    <h2>Notes</h2>
+  </div>
+);
 
 const Users = () => (
-  <div> <h2>Users</h2> </div>
-)
+  <div>
+    <h2>Users</h2>
+  </div>
+);
 
 const App = () => {
-  const [page, setPage] = useState('home')
-
- const toPage = (page) => (event) => {
-    event.preventDefault()
-    setPage(page)
-  }
-
-  const content = () => {
-    if (page === 'home') {
-      return <Home />
-    } else if (page === 'notes') {
-      return <Notes />
-    } else if (page === 'users') {
-      return <Users />
-    }
-  }
-
   const padding = {
-    padding: 5
-  }
+    padding: 5,
+  };
 
   return (
-    <div>
+    <Router>
       <div>
-        <a href="" onClick={toPage('home')} style={padding}>
+        <Link style={padding} to="/">
           home
-        </a>
-        <a href="" onClick={toPage('notes')} style={padding}>
+        </Link>
+        <Link style={padding} to="/notes">
           notes
-        </a>
-        <a href="" onClick={toPage('users')} style={padding}>
+        </Link>
+        <Link style={padding} to="/users">
           users
-        </a>
+        </Link>
       </div>
 
-      {content()}
-    </div>
-  )
-}
+      <Switch>
+        <Route path="/notes">
+          <Notes />
+        </Route>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
 
-ReactDOM.render(<App />, document.getElementById('root'))
+      <div>
+        <i>Note app, Department of Computer Science 2020</i>
+      </div>
+    </Router>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById("root"));
