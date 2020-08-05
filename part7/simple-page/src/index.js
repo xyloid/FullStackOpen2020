@@ -7,7 +7,6 @@ import {
   Route,
   Link,
   Redirect,
-  useParams,
   useHistory,
   useRouteMatch,
 } from "react-router-dom";
@@ -29,15 +28,13 @@ const Home = () => (
   </div>
 );
 
-const Note = ({ notes }) => {
-  const id = useParams().id;
-  const note = notes.find((n) => n.id === Number(id));
+const Note = ({ note }) => {
   return (
     <div>
       <h2>{note.content}</h2>
       <div>{note.user}</div>
       <div>
-        <strong>{note.important ? "tärkeä" : ""}</strong>
+        <strong>{note.important ? "important" : ""}</strong>
       </div>
     </div>
   );
@@ -153,7 +150,7 @@ const App = () => {
 
         <Switch>
           <Route path="/notes/:id">
-            <Note notes={notes} />
+            <Note notes={note} />
           </Route>
           <Route path="/notes">
             <Notes notes={notes} />
